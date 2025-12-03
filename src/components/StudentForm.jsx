@@ -11,12 +11,32 @@ const StudentForm = ({ mode, initialData, onSubmit, onCancel }) => {
         }
     );
 
+    const calculateGrade = (marks) => {
+        const m = parseFloat(marks);
+        if (isNaN(m)) return '';
+        if (m >= 90) return 'A';
+        if (m >= 80) return 'B';
+        if (m >= 70) return 'C';
+        if (m >= 60) return 'D';
+        return 'F';
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+
+        if (name === 'marks') {
+            const grade = calculateGrade(value);
+            setFormData({
+                ...formData,
+                marks: value,
+                grade: grade
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
+        }
     };
 
     const handleSubmit = (e) => {
@@ -81,8 +101,9 @@ const StudentForm = ({ mode, initialData, onSubmit, onCancel }) => {
                         id="grade"
                         name="grade"
                         value={formData.grade}
-                        onChange={handleChange}
-                        placeholder="Enter grade (A, B, C, D, F)"
+                        readOnly
+                        className="bg-gray-100 cursor-not-allowed"
+                        placeholder="Grade will be calculated automatically"
                     />
                 </div>
 

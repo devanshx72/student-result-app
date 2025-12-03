@@ -1,13 +1,6 @@
 {
   "students": [
     {
-      "id": "a64e",
-      "name": "Alice Johnson",
-      "section": "A",
-      "marks": "98",
-      "grade": "A+"
-    },
-    {
       "id": "3fbb",
       "name": "Bob Brown",
       "section": "B",
@@ -20,6 +13,20 @@
       "section": "C",
       "marks": "75",
       "grade": "C+"
+    },
+    {
+      "id": "7004",
+      "name": "Devansh Sharma",
+      "section": "EB",
+      "marks": "78",
+      "grade": "B"
+    },
+    {
+      "id": "5b11",
+      "name": "Test Student",
+      "section": "A",
+      "marks": "95",
+      "grade": "A"
     }
   ]
 }
