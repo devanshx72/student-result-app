@@ -15,7 +15,7 @@ A complete student management system built with:
 ### **Step 1: Navigate to Project Directory**
 
 ```bash
-cd /Users/devansh/Coding/student-result-app
+cd <path-to-your-folder>/student-result-app
 ```
 
 ### **Step 2: Install Dependencies** (if not already done)
