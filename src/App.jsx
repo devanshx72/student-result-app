@@ -1,5 +1,5 @@
 // App.jsx - Main application component with state management
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StudentList from './components/StudentList';
 import StudentForm from './components/StudentForm';
 import StudentDetails from './components/StudentDetails';
@@ -7,18 +7,29 @@ import { getStudents, addStudent, updateStudent, deleteStudent } from './service
 import './App.css';
 
 function App() {
-  // Main state management using only useState
+  // Main state management
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
-  const [currentScreen, setCurrentScreen] = useState('list'); // 'list' | 'add' | 'edit' | 'details'
+  const [currentScreen, setCurrentScreen] = useState('list'); // 'list' | 'add' | 'edit'
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Load students - triggered by button click only
-  const handleLoadStudents = async () => {
+  // Load students automatically on mount
+  useEffect(() => {
+    loadStudents();
+  }, []);
+
+  // Load students function
+  const loadStudents = async () => {
+    setLoading(true);
     try {
       const data = await getStudents();
       setStudents(data);
     } catch (error) {
+      console.error('Error loading students:', error);
       alert('Error loading students. Make sure JSON Server is running on port 3000.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,17 +45,24 @@ function App() {
     setCurrentScreen('edit');
   };
 
-  // Navigate to View Details screen
+  // Open View Details Modal
   const handleViewDetails = (student) => {
     setSelectedStudent(student);
-    setCurrentScreen('details');
+    setShowDetailsModal(true);
+  };
+
+  // Close View Details Modal
+  const handleCloseDetails = () => {
+    setShowDetailsModal(false);
+    setSelectedStudent(null);
   };
 
   // Submit Add form
   const handleSubmitAdd = async (formData) => {
     try {
       await addStudent(formData);
-      alert('Student added successfully! Please click "Load Students" to refresh the list.');
+      alert('Student added successfully!');
+      await loadStudents(); // Auto-refresh
       setCurrentScreen('list');
     } catch (error) {
       alert('Error adding student. Please try again.');
@@ -55,7 +73,8 @@ function App() {
   const handleSubmitEdit = async (formData) => {
     try {
       await updateStudent(selectedStudent.id, formData);
-      alert('Student updated successfully! Please click "Load Students" to refresh the list.');
+      alert('Student updated successfully!');
+      await loadStudents(); // Auto-refresh
       setCurrentScreen('list');
     } catch (error) {
       alert('Error updating student. Please try again.');
@@ -67,7 +86,8 @@ function App() {
     if (window.confirm('Are you sure you want to delete this student?')) {
       try {
         await deleteStudent(id);
-        alert('Student deleted successfully! Please click "Load Students" to refresh the list.');
+        alert('Student deleted successfully!');
+        await loadStudents(); // Auto-refresh
       } catch (error) {
         alert('Error deleting student. Please try again.');
       }
@@ -87,11 +107,12 @@ function App() {
         {currentScreen === 'list' && (
           <StudentList
             students={students}
-            onLoadStudents={handleLoadStudents}
+            onLoadStudents={loadStudents} // Keep button but it's optional now
             onAddStudent={handleAddStudent}
             onEditStudent={handleEditStudent}
             onDeleteStudent={handleDeleteStudent}
             onViewDetails={handleViewDetails}
+            loading={loading}
           />
         )}
 
@@ -112,10 +133,10 @@ function App() {
           />
         )}
 
-        {currentScreen === 'details' && (
+        {showDetailsModal && selectedStudent && (
           <StudentDetails
             student={selectedStudent}
-            onBack={handleCancel}
+            onClose={handleCloseDetails}
           />
         )}
       </div>

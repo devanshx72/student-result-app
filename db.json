@@ -1,3 +1,25 @@
 {
-    "students": []
+  "students": [
+    {
+      "id": "a64e",
+      "name": "Alice Johnson",
+      "section": "A",
+      "marks": "98",
+      "grade": "A+"
+    },
+    {
+      "id": "3fbb",
+      "name": "Bob Brown",
+      "section": "B",
+      "marks": "88",
+      "grade": "B+"
+    },
+    {
+      "id": "7b7d",
+      "name": "Charlie Davis",
+      "section": "C",
+      "marks": "75",
+      "grade": "C+"
+    }
+  ]
 }
